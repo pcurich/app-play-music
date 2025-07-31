@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-play-list-header',
@@ -6,6 +6,11 @@ import { Component } from '@angular/core';
   templateUrl: './play-list-header.html',
   styleUrl: './play-list-header.scss'
 })
-export class PlayListHeader {
+export class PlayListHeader implements OnInit {
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
 
 }

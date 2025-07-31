@@ -4,7 +4,7 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
   selector: 'img[appImgBroken]',
   standalone: true
 })
-export class ImgBroken {
+export class ImgBrokenDirective {
 
   @Input() customImg: string = ''
   @HostListener('error') handleError(): void {
