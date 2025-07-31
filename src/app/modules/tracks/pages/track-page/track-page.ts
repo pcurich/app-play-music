@@ -19,26 +19,26 @@ export class TrackPage implements OnInit, OnDestroy {
   listObservers$: Array<Subscription> = []
   mockTracksList: Array<TrackModel> = []
 
-  constructor(private trackService: TrackService) { }
+  // constructor(private trackService: TrackService) { }
 
   ngOnInit(): void {
     const {data}: any = (dataRaw as any).default
     this.mockTracksList= data;
 
-    this.loadDataAll() //TODO 📌📌
-    this.loadDataRandom() //TODO 📌📌
+    // this.loadDataAll() //TODO 📌📌
+    // this.loadDataRandom() //TODO 📌📌
   }
 
   async loadDataAll(): Promise<any> {
-    this.tracksTrending = await this.trackService.getAllTracks$().toPromise()
+    // this.tracksTrending = await this.trackService.getAllTracks$().toPromise()
 
   }
 
   loadDataRandom(): void {
-    this.trackService.getAllRandom$()
-      .subscribe((response: TrackModel[]) => {
-        this.tracksRandom = response
-      })
+    // this.trackService.getAllRandom$()
+    //   .subscribe((response: TrackModel[]) => {
+    //     this.tracksRandom = response
+    //   })
   }
 
   ngOnDestroy(): void {

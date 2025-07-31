@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { TrackModel } from '@core/models/tracks.model';
+import { ImgBroken } from '@shared/directives/img-broken';
 
 @Component({
   selector: 'app-card-player',
-  imports: [CommonModule],
+  imports: [CommonModule, ImgBroken],
   standalone: true,
   templateUrl: './card-player.html',
   styleUrl: './card-player.scss'
