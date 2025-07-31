@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { SideBar } from '@shared/components/side-bar/side-bar';
+import { RouterModule } from "@angular/router";
+import { MediaPlayer } from "@shared/components/media-player/media-player";
 
 @Component({
   selector: 'app-home-page',
-  imports: [SideBar],
+  imports: [SideBar, RouterModule, MediaPlayer],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss'
 })

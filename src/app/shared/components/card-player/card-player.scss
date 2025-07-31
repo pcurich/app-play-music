@@ -1,0 +1,78 @@
+$color_1: var(--color-4);
+$background-color_1: var(--color-2);
+$background-color_2: #4d4d4d;
+$background-color_3: var(--color-1);
+
+.card-player {
+	background-color: $background-color_1;
+	height: 5rem;
+	border-radius: var(--border-radius-1);
+	display: flex;
+	cursor: pointer;
+	transition: all ease var(--animation-1);
+	justify-content: space-between;
+	&:hover {
+		background-color: $background-color_2;
+		.buttons-player {
+			opacity: 1;
+		}
+	}
+	.cover {
+		width: 5rem;
+		height: 100%;
+		object-fit: cover;
+		border-top-left-radius: var(--border-radius-1);
+		border-bottom-left-radius: var(--border-radius-1);
+	}
+	.content-player {
+		font-weight: 500;
+		display: flex;
+		align-items: center;
+		align-content: center;
+		padding: 0 0 0 .75rem;
+	}
+	.buttons-player {
+		opacity: 0;
+		width: 5rem;
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+		transition: all ease var(--animation-1);
+		.play-btn {
+			color: $color_1;
+			border: 0;
+			font-size: 1.15rem;
+			border-radius: 2rem;
+			background-color: $background-color_3;
+			width: 45px;
+			height: 45px;
+		}
+	}
+}
+.card-player.player-big {
+	position: relative;
+	flex-direction: column;
+	height: 18rem;
+	padding: 1rem;
+	.cover {
+		width: 100%;
+		height: 200px;
+		border-radius: var(--border-radius-1);
+	}
+	.content-player {
+		padding: .5rem 0;
+		flex-direction: column;
+		align-self: flex-start;
+		align-items: flex-start;
+		.sub-title-track {
+			font-size: 80%;
+			opacity: .7;
+		}
+	}
+	.buttons-player {
+		position: absolute;
+		right: 0;
+		top: 13rem;
+	}
+}

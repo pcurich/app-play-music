@@ -1,0 +1,140 @@
+$color_1: var(--color-4);
+$background-color_1: var(--color-5);
+$background-color_2: transparent;
+$background-color_3: var(--color-2);
+$background-color_4: var(--color-4);
+
+.media-player {
+	background-color: $background-color_1;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	z-index: 2;
+	height: 85px;
+	border-top: solid 1px var(--color-2);
+	box-shadow: 0px -15px 15px 7px #0000002e;
+	.media-player--wrapper {
+		position: relative;
+		display: flex;
+		justify-content: space-between;
+		height: 100%;
+		padding: 0;
+		.player-center {
+			display: flex;
+			align-content: center;
+			align-items: center;
+		}
+	}
+}
+.media-player--wrapper {
+	.artist {
+		width: 25%;
+		padding: 0 .5rem;
+		.artist-inside {
+			display: flex;
+			gap: .5rem;
+			.track-info {
+				display: flex;
+				flex-direction: column;
+				align-self: center;
+			}
+			.track-title {
+				margin: 0;
+				font-weight: 400;
+				font-size: .8rem;
+			}
+			.sub-title {
+				margin: 0;
+				font-weight: 300;
+				font-size: 80%;
+				opacity: .6;
+			}
+			.cover {
+				width: 55px;
+				height: 55px;
+				object-fit: cover;
+			}
+		}
+		.track-like {
+			display: flex;
+			flex-direction: column;
+			align-self: center;
+			padding: 0 .25rem;
+			.btn-like {
+				border: 0;
+				background-color: $background-color_2;
+				color: $color_1;
+				font-size: var(--font-size-2);
+				opacity: .7;
+			}
+		}
+	}
+	.player-audio {
+		width: 25%;
+		padding: 0 .5rem;
+	}
+	.player-controls {
+		width: 50%;
+		padding: 0 .5rem;
+		position: relative;
+	}
+	.player-controls-inside {
+		display: flex;
+		justify-content: center;
+		align-self: center;
+		flex-direction: column;
+		width: 100%;
+		position: relative;
+		.buttons-media {
+			display: flex;
+			justify-content: center;
+			align-self: center;
+			gap: .5rem;
+			.btn {
+				background-color: $background-color_2;
+				border: 0;
+				color: $color_1;
+				opacity: .7;
+				font-size: 1.65rem;
+			}
+			.play {
+				font-size: 2.35rem;
+			}
+		}
+		.media-linetime {
+			display: flex;
+			justify-content: space-between;
+			font-size: 70%;
+			padding: 0;
+			.time {
+				padding: .5rem 0;
+			}
+			.time-progress {
+				background-color: $background-color_3;
+				height: 2px;
+				width: 100%;
+				left: 0;
+				position: absolute;
+				cursor: pointer;
+			}
+			.time-progress-live {
+				background-color: $background-color_4;
+				width: 0%;
+				height: 2px;
+				transition: all ease var(--animation-1);
+				position: absolute;
+			}
+		}
+	}
+	.player-audio-inside {
+		display: flex;
+		justify-content: flex-end;
+		width: 100%;
+		.btn-media {
+			background-color: $background-color_2;
+			border: 0;
+			color: $color_1;
+			font-size: var(--font-size-2);
+		}
+	}
+}
