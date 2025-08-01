@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '@modules/auth/services/auth.service';
 
 @Component({
   selector: 'app-login-page',
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   standalone: true,
   templateUrl: './login-page.html',
   styleUrl: './login-page.scss'
@@ -15,6 +16,7 @@ export class LoginPage implements OnInit {
   formLogin: UntypedFormGroup = new UntypedFormGroup({});
 
   constructor(
+    private authService: AuthService,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -36,18 +38,18 @@ export class LoginPage implements OnInit {
 
   sendLogin(): void {
     const { email, password } = this.formLogin.value
-    // this.authService.sendCredentials(email, password)
-    //   //TODO: 200 <400
-    //   .subscribe(responseOk => { //TODO: Cuando el usuario credenciales Correctas ✔✔
-    //     console.log('Session iniciada correcta', responseOk);
-    //     const { tokenSession, data } = responseOk
-    //     this.cookie.set('token', tokenSession, 4, '/') //TODO:📌📌📌📌
-    //     this.router.navigate(['/', 'tracks'])
-    //   },
-    //     err => {//TODO error 400>=
-    //       this.errorSession = true
-    //       console.log('⚠⚠⚠⚠Ocurrio error con tu email o password');
-    //     })
+    this.authService.sendCredentials(email, password)
+      //TODO: 200 <400
+      .subscribe(responseOk => { //TODO: Cuando el usuario credenciales Correctas ✔✔
+        console.log('Session iniciada correcta', responseOk);
+        const { tokenSession, data } = responseOk
+        // this.cookie.set('token', tokenSession, 4, '/') //TODO:📌📌📌📌
+        this.router.navigate(['/', 'tracks'])
+      },
+        err => {//TODO error 400>=
+          this.errorSession = true
+          console.log('⚠⚠⚠⚠Ocurrio error con tu email o password');
+        })
 
   }
 

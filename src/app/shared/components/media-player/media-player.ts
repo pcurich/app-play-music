@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TrackModel } from '@core/models/tracks.model';
+import { MultimediaService } from '@shared/services/multimedia.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -12,6 +13,9 @@ import { Subscription } from 'rxjs';
   styleUrl: './media-player.scss'
 })
 export class MediaPlayer implements OnInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly multimediaService: MultimediaService = inject(MultimediaService);
+
   mockCover: TrackModel = {
     _id: 0,
     name: 'Track Name',
@@ -22,18 +26,18 @@ export class MediaPlayer implements OnInit, OnDestroy {
   @ViewChild('progressBar') progressBar: ElementRef = new ElementRef('')
   listObservers$: Array<Subscription> = []
   state: string = 'paused'
-  // constructor(public multimediaService: MultimediaService) { }
+
 
   ngOnInit(): void {
 
-    // const observer1$ = this.multimediaService.playerStatus$
-    //   .pipe(takeUntilDestroyed())
-    //   .subscribe(status => this.state = status)
-    // this.listObservers$ = [observer1$]
+    const observer1$: Subscription = this.multimediaService.callback
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(status => this.state = status)
+    this.listObservers$ = [observer1$]
   }
 
   ngOnDestroy(): void {
-    // this.listObservers$.forEach(u => u.unsubscribe())
+    this.listObservers$.forEach(u => u.unsubscribe())
     console.log('🔴🔴🔴🔴🔴🔴🔴 BOOM!');
   }
 
