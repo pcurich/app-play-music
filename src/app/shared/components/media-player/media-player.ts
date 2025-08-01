@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { TrackModel } from '@core/models/tracks.model';
 import { MultimediaService } from '@shared/services/multimedia.service';
 import { Subscription } from 'rxjs';
@@ -12,32 +12,23 @@ import { Subscription } from 'rxjs';
   templateUrl: './media-player.html',
   styleUrl: './media-player.scss'
 })
-export class MediaPlayer implements OnInit, OnDestroy {
-  private readonly destroyRef = inject(DestroyRef);
+export class MediaPlayer implements OnDestroy    {
+  @ViewChild('progressBar') progressBar: ElementRef = new ElementRef('')
+
   private readonly multimediaService: MultimediaService = inject(MultimediaService);
 
-  mockCover: TrackModel = {
+  mockCover = signal<TrackModel>({
     _id: 0,
     name: 'Track Name',
     album: 'Album Name',
     cover: 'https://via.placeholder.com/150',
     url: 'https://example.com/track.mp3'
-  }
-  @ViewChild('progressBar') progressBar: ElementRef = new ElementRef('')
+  });
+
   listObservers$: Array<Subscription> = []
-  state: string = 'paused'
-
-
-  ngOnInit(): void {
-
-    const observer1$: Subscription = this.multimediaService.callback
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(status => this.state = status)
-    this.listObservers$ = [observer1$]
-  }
+  state = toSignal(this.multimediaService.callback, { initialValue: 'paused' });
 
   ngOnDestroy(): void {
-    this.listObservers$.forEach(u => u.unsubscribe())
     console.log('🔴🔴🔴🔴🔴🔴🔴 BOOM!');
   }
 
@@ -50,7 +41,6 @@ export class MediaPlayer implements OnInit, OnDestroy {
     const percentageFromX = (clickX * 100) / width
     console.log(`Click(x): ${percentageFromX}`);
     // this.multimediaService.seekAudio(percentageFromX)
-
   }
 
 

@@ -18,9 +18,9 @@ export class TrackService {
     this.dataTracksTrendings$ = of(data);
     this.dataTracksRandom$ = new Observable<TrackModel[]>(observer => {
       setTimeout(() => {
-        observer.next([data]);
-    },3500)
-  })
+        observer.next(data);
+      }, 3500)
+    })
   }
 
   private skipById(listTracks: TrackModel[], id: number): Promise<TrackModel[]> {

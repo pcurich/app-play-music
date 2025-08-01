@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { TrackModel } from '@core/models/tracks.model';
 import { TrackService } from '@modules/tracks/services/track.service';
 import { SectionGeneric } from "@shared/components/section-generic/section-generic";
@@ -11,54 +12,28 @@ import { Subscription } from 'rxjs';
   templateUrl: './track-page.html',
   styleUrl: './track-page.scss'
 })
-export class TrackPage implements OnInit, OnDestroy {
+export class TrackPage {
+  private trackService = inject(TrackService);
 
-  tracksTrending: Array<TrackModel> = []
-  tracksRandom: Array<TrackModel> = []
-  listObservers$: Array<Subscription> = []
-  mockTracksList: Array<TrackModel> = []
+  tracksTrending = toSignal(this.trackService.dataTracksTrendings$, { initialValue: [] });
+  tracksRandom = signal<TrackModel[]>([]);
 
-  constructor(private trackService: TrackService) { }
+  constructor() {
 
-  ngOnInit(): void {
+    this.trackService.dataTracksTrendings$.subscribe(tracks => {
+      this.tracksRandom.set(tracks);
+    });
 
-    const observer1$: Subscription = this.trackService.dataTracksTrendings$.subscribe((tracks: TrackModel[]) => {
-      this.mockTracksList = tracks;
-      this.tracksTrending = tracks;
-      this.tracksRandom = tracks;
-    })
+    this.trackService.dataTracksRandom$.subscribe(tracks => {
+      const currentTracks = this.tracksRandom();
+      const startId = currentTracks.length + 2;
 
-    const observer2$: Subscription = this.trackService.dataTracksRandom$.subscribe((tracks: TrackModel[]) => {
-      const startId = this.tracksRandom.length + 1;
       const updatedTracks = tracks.map((track, idx) => ({
         ...track,
         _id: startId + idx
       }));
-      this.tracksRandom = [...this.tracksRandom, ...updatedTracks];
-      console.log('PCURICH', this.tracksRandom);
-    })
-    this.listObservers$ = [observer1$, observer2$];
 
-    // this.loadDataAll() //TODO 📌📌
-    // this.loadDataRandom() //TODO 📌📌
+      this.tracksRandom.update(current => [...current, ...updatedTracks]);
+    });
   }
-
-  async loadDataAll(): Promise<any> {
-    this.tracksTrending = await this.trackService.getAllTracks$().toPromise()
-
-  }
-
-  loadDataRandom(): void {
-    this.trackService.getAllRandom$()
-      .subscribe((response: TrackModel[]) => {
-        this.tracksRandom = response
-      })
-  }
-
-  ngOnDestroy(): void {
-    this.listObservers$.forEach(u => u.unsubscribe())
-    console.log('🔴🔴🔴🔴🔴🔴🔴 track page!');
-  }
-
-
 }
