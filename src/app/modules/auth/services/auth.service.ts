@@ -1,5 +1,5 @@
-import { Injectable, Inject, signal, computed } from '@angular/core';
-import { Observable, BehaviorSubject, map, tap, catchError, throwError } from 'rxjs';
+import { Injectable, Inject, computed } from '@angular/core';
+import { Observable, BehaviorSubject, tap, catchError, throwError } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { IAuthRepository } from '../interfaces/auth-repository.interface';
 import { IAuthValidator } from '../interfaces/auth-validator.interface';
