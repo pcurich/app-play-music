@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { PlayListBody } from "@shared/components/play-list-body/play-list-body";
-import { PlayListHeader } from "@shared/components/play-list-header/play-list-header";
+import { PlayListBody } from "@shared/index";
+import { PlayListHeader } from "@shared/index";
 
 @Component({
   selector: 'app-favorite-page',

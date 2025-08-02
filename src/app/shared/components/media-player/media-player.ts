@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, ElementRef, inject, OnDestroy, signal, ViewChild } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { TrackModel } from '@core/models/tracks.model';
+import { MultimediaService } from '@shared/index';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -11,29 +12,23 @@ import { Subscription } from 'rxjs';
   templateUrl: './media-player.html',
   styleUrl: './media-player.scss'
 })
-export class MediaPlayer implements OnInit, OnDestroy {
-  mockCover: TrackModel = {
+export class MediaPlayer implements OnDestroy    {
+  @ViewChild('progressBar') progressBar: ElementRef = new ElementRef('')
+
+  private readonly multimediaService: MultimediaService = inject(MultimediaService);
+
+  mockCover = signal<TrackModel>({
     _id: 0,
     name: 'Track Name',
     album: 'Album Name',
     cover: 'https://via.placeholder.com/150',
     url: 'https://example.com/track.mp3'
-  }
-  @ViewChild('progressBar') progressBar: ElementRef = new ElementRef('')
+  });
+
   listObservers$: Array<Subscription> = []
-  state: string = 'paused'
-  // constructor(public multimediaService: MultimediaService) { }
-
-  ngOnInit(): void {
-
-    // const observer1$ = this.multimediaService.playerStatus$
-    //   .pipe(takeUntilDestroyed())
-    //   .subscribe(status => this.state = status)
-    // this.listObservers$ = [observer1$]
-  }
+  state = toSignal(this.multimediaService.callback, { initialValue: 'paused' });
 
   ngOnDestroy(): void {
-    // this.listObservers$.forEach(u => u.unsubscribe())
     console.log('🔴🔴🔴🔴🔴🔴🔴 BOOM!');
   }
 
@@ -46,7 +41,6 @@ export class MediaPlayer implements OnInit, OnDestroy {
     const percentageFromX = (clickX * 100) / width
     console.log(`Click(x): ${percentageFromX}`);
     // this.multimediaService.seekAudio(percentageFromX)
-
   }
 
 

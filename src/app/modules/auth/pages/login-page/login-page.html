@@ -1,0 +1,91 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Welcome Back</h1>
+      <p>Sign in to your music account</p>
+    </div>
+
+    <!-- Error Alert -->
+    @if (hasError()) {
+      <div class="alert alert-error" (click)="clearError()">
+        <span>{{ errorMessage() }}</span>
+        <button type="button" class="alert-close">×</button>
+      </div>
+    }
+
+    <form [formGroup]="formLogin" (ngSubmit)="sendLogin()" class="login-form">
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          class="form-control"
+          [class.error]="emailErrors()"
+          placeholder="Enter your email"
+          autocomplete="email">
+
+        @if (emailErrors()) {
+          <span class="error-message">{{ emailErrors() }}</span>
+        }
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-input-container">
+          <input
+            id="password"
+            [type]="showPassword() ? 'text' : 'password'"
+            formControlName="password"
+            class="form-control"
+            [class.error]="passwordErrors()"
+            placeholder="Enter your password"
+            autocomplete="current-password">
+
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePasswordVisibility()">
+            {{ showPassword() ? '👁️' : '👁️‍🗨️' }}
+          </button>
+        </div>
+
+        @if (passwordErrors()) {
+          <span class="error-message">{{ passwordErrors() }}</span>
+        }
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="isFormValid() || isLoading()">
+
+        @if (isLoading()) {
+          <span class="spinner"></span>
+          Signing in...
+        } @else {
+          Sign In
+        }
+      </button>
+
+      <!-- Test Credentials Button (only in development) -->
+      @if (!isLoading()) {
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="fillTestCredentials()">
+          Use Test Credentials
+        </button>
+      }
+    </form>
+
+    <div class="login-footer">
+      <p>Don't have an account? <a routerLink="/auth/register">Sign up</a></p>
+    </div>
+  </div>
+</div>
+
+{{formLogin.errors | json}}

@@ -33,10 +33,18 @@
             "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts"
+            },
+            "define": {
+              "process.env.NODE_ENV": "'development'",
+              "process.env.API_URL": "'http://localhost:3001/api/1.0'"
             }
           },
           "configurations": {
             "production": {
+              "define": {
+                "process.env.NODE_ENV": "'production'",
+                "process.env.API_URL": "'http://localhost:3001/api/1.0'"
+              },
               "budgets": [
                 {
                   "type": "initial",
@@ -54,10 +62,14 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "define": {
+                "process.env.NODE_ENV": "'development'",
+                "process.env.API_URL": "'http://localhost:3001/api/1.0'"
+              }
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular/build:dev-server",
