@@ -8,7 +8,7 @@ export class AppCookieService {
   private cookieService = inject(CookieService);
 
   setCookie(name: string, value: string, expires?: number): void {
-    this.cookieService.set(name, value, expires);
+    this.cookieService.set(name, value, expires, '/');
   }
 
   getCookie(name: string): string {

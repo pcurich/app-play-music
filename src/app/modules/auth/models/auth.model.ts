@@ -1,8 +1,7 @@
 import { UserModel } from "./user.model";
 
 export interface AuthModel {
-  accessToken: string;
-  refreshToken: string;
   user: UserModel;
-  expiresIn: number;
+  tokenSession: string;
+  expiresIn?: number; // Opcional para calcular expiración
 }

@@ -13,6 +13,10 @@ import { LoginRequest, RegisterRequest } from '../models/request.model';
   providedIn: 'root'
 })
 export class AuthService {
+
+  private static readonly TOKEN_SESSION_KEY = 'token_session';
+  private static readonly TOKEN_SESSION_EXPIRES_DAYS = 1;
+
   private currentUserSubject = new BehaviorSubject<UserModel | null>(null);
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
 
@@ -24,7 +28,7 @@ export class AuthService {
   isLoggedIn = computed(() => this.isAuthenticated() && this.currentUser() !== null);
   userDisplayName = computed(() => {
     const user = this.currentUser();
-    return user ? user.username || user.email : '';
+    return user ? user.name || user.email : '';
   });
 
   constructor(
@@ -36,7 +40,7 @@ export class AuthService {
   }
 
   private initializeAuth(): void {
-    const token = this.cookieService.getCookie('access_token');
+    const token = this.cookieService.getCookie(AuthService.TOKEN_SESSION_KEY);
     if (token) {
       this.repository.getCurrentUser().subscribe({
         next: (user) => {
@@ -50,9 +54,41 @@ export class AuthService {
     }
   }
 
+  hasValidSession(): boolean {
+    try {
+      const token = this.getAccessToken();
+
+      if (!token) {
+        return false;
+      }
+
+      // Verificar si el token no ha expirado (opcional)
+      if (this.isTokenExpired(token)) {
+        this.clearTokens();
+        return false;
+      }
+
+      return this.isAuthenticated();
+    } catch (error) {
+      console.error('Error checking session validity:', error);
+      return false;
+    }
+  }
+
+  private isTokenExpired(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const now = Math.floor(Date.now() / 1000);
+      return payload.exp && payload.exp < now;
+    } catch {
+      return true; // Si no se puede parsear, considerar expirado
+    }
+  }
+
   login(credentials: LoginRequest): Observable<AuthModel> {
     return this.repository.login(credentials).pipe(
       tap(authData => {
+        console.log('Login successful:', authData);
         this.saveTokens(authData);
         this.setCurrentUser(authData.user);
         this.setAuthenticated(true);
@@ -90,8 +126,43 @@ export class AuthService {
         this.clearTokens();
         this.setCurrentUser(null);
         this.setAuthenticated(false);
+      }),
+      catchError(() => {
+        // Incluso si falla el logout en el servidor, limpiar localmente
+        this.clearTokens();
+        this.setCurrentUser(null);
+        this.setAuthenticated(false);
+        return throwError(() => new Error('Logout failed on server, but cleared locally'));
       })
     );
+  }
+
+  refreshTokens(): Observable<AuthModel> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      this.clearTokens();
+      this.setAuthenticated(false);
+      return throwError(() => new Error('No refresh token available'));
+    }
+
+    return this.repository.refreshToken(refreshToken).pipe(
+      tap(authData => {
+        this.saveTokens(authData);
+        this.setCurrentUser(authData.user);
+        this.setAuthenticated(true);
+      }),
+      catchError(error => {
+        // Si falla el refresh, limpiar tokens
+        this.clearTokens();
+        this.setAuthenticated(false);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  getRefreshToken(): string | null {
+    // Si el servidor no maneja refresh tokens separados, usar el mismo token
+    return this.getAccessToken();
   }
 
   private validateRegistrationData(userData: RegisterRequest): string[] {
@@ -118,13 +189,15 @@ export class AuthService {
   }
 
   private saveTokens(authData: AuthModel): void {
-    this.cookieService.setCookie('access_token', authData.accessToken, 1); // 1 día
-    this.cookieService.setCookie('refresh_token', authData.refreshToken, 30); // 30 días
+    this.cookieService.setCookie(
+      AuthService.TOKEN_SESSION_KEY,
+      authData.tokenSession,
+      AuthService.TOKEN_SESSION_EXPIRES_DAYS,
+    );
   }
 
   private clearTokens(): void {
-    this.cookieService.deleteCookie('access_token');
-    this.cookieService.deleteCookie('refresh_token');
+    this.cookieService.deleteCookie(AuthService.TOKEN_SESSION_KEY);
   }
 
   private setCurrentUser(user: UserModel | null): void {
@@ -137,19 +210,6 @@ export class AuthService {
 
   // Métodos públicos para componentes
   getAccessToken(): string | null {
-    return this.cookieService.getCookie('access_token') || null;
-  }
-
-  refreshTokens(): Observable<AuthModel> {
-    const refreshToken = this.cookieService.getCookie('refresh_token');
-    if (!refreshToken) {
-      return throwError(() => new Error('No refresh token available'));
-    }
-
-    return this.repository.refreshToken(refreshToken).pipe(
-      tap(authData => {
-        this.saveTokens(authData);
-      })
-    );
+    return this.cookieService.getCookie(AuthService.TOKEN_SESSION_KEY) || null;
   }
 }

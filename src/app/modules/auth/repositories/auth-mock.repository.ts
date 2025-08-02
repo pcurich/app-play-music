@@ -12,7 +12,7 @@ export class AuthMockRepository implements IAuthRepository {
   private mockUsers: UserModel[] = [
     {
       id: 1,
-      username: 'testuser',
+      name: 'testuser',
       email: 'test@example.com',
       avatar: 'https://via.placeholder.com/150',
       isActive: true,
@@ -26,8 +26,7 @@ export class AuthMockRepository implements IAuthRepository {
       setTimeout(() => {
         if (credentials.email === 'test@example.com' && credentials.password === 'password') {
           const authData: AuthModel = {
-            accessToken: 'mock-access-token',
-            refreshToken: 'mock-refresh-token',
+            tokenSession: 'new-mock-token-session',
             user: this.mockUsers[0],
             expiresIn: 3600
           };
@@ -45,16 +44,16 @@ export class AuthMockRepository implements IAuthRepository {
       setTimeout(() => {
         const newUser: UserModel = {
           id: Date.now(),
-          username: userData.username,
+          name: userData.username,
           email: userData.email,
           isActive: true,
+          avatar: userData.avatar || 'https://via.placeholder.com/150',
           createdAt: new Date(),
           updatedAt: new Date()
         };
 
         const authData: AuthModel = {
-          accessToken: 'mock-access-token',
-          refreshToken: 'mock-refresh-token',
+          tokenSession: 'new-mock-token-session',
           user: newUser,
           expiresIn: 3600
         };
@@ -72,6 +71,7 @@ export class AuthMockRepository implements IAuthRepository {
 
   refreshToken(token: string): Observable<AuthModel> {
     return of({
+      tokenSession: 'new-mock-token-session',
       accessToken: 'new-mock-access-token',
       refreshToken: token,
       user: this.mockUsers[0],

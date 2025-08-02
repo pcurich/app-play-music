@@ -1,9 +1,11 @@
 export interface UserModel {
-  id: number;
-  username: string;
+  name: string;
   email: string;
-  avatar?: string;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  password?: string; // Opcional, generalmente no se devuelve
+  avatar: string;
+  id?: number; // Agregar si el servidor lo proporciona
+  username?: string; // Alias para name si es necesario
+  isActive?: boolean; // Campos adicionales opcionales
+  createdAt?: Date;
+  updatedAt?: Date;
 }
