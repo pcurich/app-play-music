@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { TrackModel } from '@core/models/tracks.model';
 import { TrackService } from '@modules/tracks/services/track.service';
 import { SectionGeneric } from "@shared/components/section-generic/section-generic";
-import { Subscription } from 'rxjs';
+import { catchError, of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-track-page',
@@ -15,7 +15,12 @@ import { Subscription } from 'rxjs';
 export class TrackPage {
   private trackService = inject(TrackService);
 
-  tracksTrending = toSignal(this.trackService.dataTracksTrendings$, { initialValue: [] });
+  tracksTrending = toSignal(this.trackService.getAllTracks$().pipe(
+    catchError(err => {
+      console.error('Error loading tracks:', err);
+      return of([]);
+    })
+  ), { initialValue: [] });
   tracksRandom = signal<TrackModel[]>([]);
 
   constructor() {
@@ -24,7 +29,7 @@ export class TrackPage {
       this.tracksRandom.set(tracks);
     });
 
-    this.trackService.dataTracksRandom$.subscribe(tracks => {
+    this.trackService.getAllRandom$().subscribe(tracks => {
       const currentTracks = this.tracksRandom();
       const startId = currentTracks.length + 2;
 
