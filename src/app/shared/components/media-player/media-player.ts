@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, ElementRef, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { Component, ElementRef, inject, OnDestroy, signal, ViewChild } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { TrackModel } from '@core/models/tracks.model';
-import { MultimediaService } from '@shared/services/multimedia.service';
+import { MultimediaService } from '@shared/index';
 import { Subscription } from 'rxjs';
 
 @Component({

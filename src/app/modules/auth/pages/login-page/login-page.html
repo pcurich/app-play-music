@@ -1,30 +1,91 @@
-<div class="login-auth-page">
-    <div class="login-auth-wrapper">
-        <h3>Para continuar, inicia sesión en Spotify.</h3>
-        <div class="login-social-zone">
-            <button class="social-btn btn-fb "> <i class="uil uil-facebook-f"></i> Continuar con Social</button>
-            <button class="social-btn btn-apple"><i class="uil uil-apple"></i> Continuar con Apple</button>
-            <button class="social-btn"><i class="uil uil-google"></i> Continuar con Google</button>
-        </div>
-        <div class="separator"></div>
-        <form (ngSubmit)="sendLogin()" [formGroup]="formLogin" class="login-auth-form">
-            <div class="form-group">
-                <label for="email">Dirección de correo o nombre de usuario</label>
-                <input formControlName="email" type="text" placeholder="Dirección de correo o nombre de usuario" class="form-input">
-            </div>
-            <div class="form-group">
-                <label for="password">Contraseña</label>
-                <input formControlName="password" type="password" placeholder="Contraseña" class="form-input" minlength="6" maxlength="12">
-            </div>
-            <div class="form-steps">
-                <a class="link" href="">¿Se te ha olvidado la contraseña?</a>
-            </div>
-            <div *ngIf="errorSession">
-                Ocurrio un error con tu email o password
-            </div>
-            <div class="form-action">
-                <button type="submit" [disabled]="formLogin.invalid" class="login social-btn">Iniciar sesión</button>
-            </div>
-        </form>
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Welcome Back</h1>
+      <p>Sign in to your music account</p>
     </div>
+
+    <!-- Error Alert -->
+    @if (hasError()) {
+      <div class="alert alert-error" (click)="clearError()">
+        <span>{{ errorMessage() }}</span>
+        <button type="button" class="alert-close">×</button>
+      </div>
+    }
+
+    <form [formGroup]="formLogin" (ngSubmit)="sendLogin()" class="login-form">
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          class="form-control"
+          [class.error]="emailErrors()"
+          placeholder="Enter your email"
+          autocomplete="email">
+
+        @if (emailErrors()) {
+          <span class="error-message">{{ emailErrors() }}</span>
+        }
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-input-container">
+          <input
+            id="password"
+            [type]="showPassword() ? 'text' : 'password'"
+            formControlName="password"
+            class="form-control"
+            [class.error]="passwordErrors()"
+            placeholder="Enter your password"
+            autocomplete="current-password">
+
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePasswordVisibility()">
+            {{ showPassword() ? '👁️' : '👁️‍🗨️' }}
+          </button>
+        </div>
+
+        @if (passwordErrors()) {
+          <span class="error-message">{{ passwordErrors() }}</span>
+        }
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="isFormValid() || isLoading()">
+
+        @if (isLoading()) {
+          <span class="spinner"></span>
+          Signing in...
+        } @else {
+          Sign In
+        }
+      </button>
+
+      <!-- Test Credentials Button (only in development) -->
+      @if (!isLoading()) {
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="fillTestCredentials()">
+          Use Test Credentials
+        </button>
+      }
+    </form>
+
+    <div class="login-footer">
+      <p>Don't have an account? <a routerLink="/auth/register">Sign up</a></p>
+    </div>
+  </div>
 </div>
+
+{{formLogin.errors | json}}

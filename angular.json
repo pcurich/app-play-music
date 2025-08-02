@@ -43,7 +43,7 @@
             "production": {
               "define": {
                 "process.env.NODE_ENV": "'production'",
-                "process.env.API_URL": "'https://api.production.com/api/1.0'"
+                "process.env.API_URL": "'http://localhost:3001/api/1.0'"
               },
               "budgets": [
                 {

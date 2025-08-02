@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { TrackModel } from '@core/models/tracks.model';
-import { ImgBrokenDirective } from '@shared/directives/img-broken-directive';
-import { MultimediaService } from '@shared/services/multimedia.service';
+import { ImgBrokenDirective } from '@shared/index';
+import { MultimediaService } from '@shared/index';
 
 @Component({
   selector: 'app-card-player',

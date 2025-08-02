@@ -3,8 +3,8 @@ import { Inject, Injectable } from "@angular/core";
 import { ITrackRepository } from "@modules/tracks/interfaces/track-repository.interface";
 import { TrackModel } from "@core/models/tracks.model";
 import { Observable, map, catchError } from "rxjs";
-import { environment } from "src/environments/environment";
-import { IErrorHandler } from "@shared/interfaces/error-handler.interface";
+import { environment } from '@env/environment';
+import { IErrorHandler } from "@shared/index";
 import { ERROR_HANDLER_TOKEN } from "@shared/index";
 
 

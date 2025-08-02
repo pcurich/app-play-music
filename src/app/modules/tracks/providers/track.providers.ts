@@ -1,4 +1,4 @@
-import { environment } from "src/environments/environment";
+import { environment } from '@env/environment';
 import { TRACK_FILTER_TOKEN, TRACK_REPOSITORY_TOKEN } from "../tokens/track.tokens";
 import { TrackFilterService } from "../services/track-filter.service";
 import { TrackHttpRepository } from "../repositories/track-http.repository";

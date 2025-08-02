@@ -6,6 +6,8 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { provideHttpClient } from '@angular/common/http';
 import { TRACK_PROVIDERS } from '@modules/tracks';
 import { SHARED_PROVIDERS } from './shared';
+import { CookieService } from 'ngx-cookie-service';
+import { AUTH_PROVIDERS } from '@modules/auth/providers/auth.providers';
 
 
 export const appConfig: ApplicationConfig = {
@@ -15,7 +17,9 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
+    CookieService,
     ...TRACK_PROVIDERS,
     ...SHARED_PROVIDERS,
+    ...AUTH_PROVIDERS,
   ]
 };

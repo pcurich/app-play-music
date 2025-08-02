@@ -2,8 +2,8 @@ import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TrackModel } from '@core/models/tracks.model';
 import { TrackService } from '@modules/tracks/services/track.service';
-import { SectionGeneric } from "@shared/components/section-generic/section-generic";
-import { catchError, of, Subscription } from 'rxjs';
+import { SectionGeneric } from "@shared/index";
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-track-page',
