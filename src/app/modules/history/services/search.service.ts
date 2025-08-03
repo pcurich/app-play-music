@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { TrackModel } from '@core/models/tracks.model';
 import { environment } from '@env/environment';
 import { map, Observable } from 'rxjs';
+import { IHistoryRepository } from '../interfaces/history-repository.interface';
+import { HISTORY_REPOSITORY_TOKEN } from '../tokens/history.tokens';
 
 @Injectable({
   providedIn: 'root'
@@ -10,15 +12,9 @@ import { map, Observable } from 'rxjs';
 export class SearchService {
  private readonly URL = environment.api
 
-  constructor(private http: HttpClient) { }
+  constructor(@Inject(HISTORY_REPOSITORY_TOKEN) private repository: IHistoryRepository) { }
 
   searchTracks$(term: string): Observable<TrackModel[]> {
-    return this.http.get<{data: TrackModel[]}>(`${this.URL}/tracks?src=${term}`)
-      .pipe(
-        map(response => {
-          console.log('Search results:', response.data);
-          return response.data;
-        }),
-      )
+    return this.repository.searchTracks(term)
   }
 }
