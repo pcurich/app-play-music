@@ -13,6 +13,7 @@ import {
   loadingInterceptor,
   errorHandlerInterceptor
 } from '@shared/interceptors';
+import { HISTORY_PROVIDERS } from '@modules/history';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,5 +32,6 @@ export const appConfig: ApplicationConfig = {
     ...TRACK_PROVIDERS,
     ...SHARED_PROVIDERS,
     ...AUTH_PROVIDERS,
+    ...HISTORY_PROVIDERS,
   ]
 };

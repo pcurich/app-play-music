@@ -1,0 +1,343 @@
+// ===================================
+// VARIABLES
+// ===================================
+$primary-color: #007acc;
+$secondary-color: #6c757d;
+$success-color: #28a745;
+$warning-color: #ffc107;
+$danger-color: #dc3545;
+$light-gray: #f8f9fa;
+$dark-gray: #495057;
+
+$border-radius: 8px;
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 40px;
+
+$transition-fast: 0.2s ease;
+$transition-medium: 0.3s ease;
+
+// ===================================
+// CONTENEDOR PRINCIPAL
+// ===================================
+.history-page {
+  padding: $spacing-lg;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 70vh;
+
+  // ===================================
+  // SECCIÓN DE BÚSQUEDA
+  // ===================================
+  .search-container {
+    margin-bottom: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+
+    // Mensaje de validación
+    .validation-message {
+      background: lighten($warning-color, 35%);
+      border: 1px solid lighten($warning-color, 15%);
+      color: darken($warning-color, 25%);
+      padding: $spacing-sm $spacing-md;
+      border-radius: $border-radius;
+      font-size: 14px;
+      transition: all $transition-fast;
+
+      p {
+        margin: 0;
+        font-weight: 500;
+      }
+
+      // Animación de entrada
+      animation: slideIn $transition-medium ease;
+    }
+
+    // Contador de caracteres
+    .char-counter {
+      font-size: 12px;
+      color: $secondary-color;
+      text-align: right;
+      transition: color $transition-fast;
+
+      &.invalid {
+        color: $danger-color;
+        font-weight: bold;
+      }
+    }
+  }
+
+  // ===================================
+  // ESTADO DE CARGA
+  // ===================================
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-xl;
+    text-align: center;
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid lighten($primary-color, 40%);
+      border-top: 3px solid $primary-color;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: $spacing-md;
+    }
+
+    p {
+      color: $secondary-color;
+      margin: 0;
+      font-size: 16px;
+    }
+  }
+
+  // ===================================
+  // CONTENEDOR DE RESULTADOS
+  // ===================================
+  .results-container {
+    border-radius: $border-radius;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: box-shadow $transition-medium;
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    h3 {
+      color: $light-gray;
+      margin: 0;
+      padding: $spacing-md $spacing-lg;
+      font-size: 18px;
+      font-weight: 600;
+      color: $dark-gray;
+      border-bottom: 1px solid $dark-gray;
+    }
+  }
+
+  // ===================================
+  // ESTADO VACÍO
+  // ===================================
+  .empty-state {
+    text-align: center;
+    padding: $spacing-xl;
+    background: $light-gray;
+    border-radius: $border-radius;
+    margin: $spacing-lg 0;
+    border: 2px dashed lighten($secondary-color, 20%);
+
+    p {
+      color: $secondary-color;
+      margin: 0;
+      font-size: 16px;
+      font-style: italic;
+    }
+  }
+
+  // ===================================
+  // ESTADO PLACEHOLDER
+  // ===================================
+  .placeholder-state {
+    text-align: center;
+    padding: $spacing-xl * 1.5;
+    color: $secondary-color;
+
+    h3 {
+      margin: 0 0 $spacing-sm 0;
+      color: $dark-gray;
+      font-size: 24px;
+      font-weight: 300;
+    }
+
+    p {
+      margin: 0;
+      font-size: 16px;
+      opacity: 0.8;
+    }
+
+    // Icono opcional (si agregas uno después)
+    &::before {
+      content: "🔍";
+      display: block;
+      font-size: 48px;
+      margin-bottom: $spacing-md;
+      opacity: 0.5;
+    }
+  }
+}
+
+// ===================================
+// ANIMACIONES
+// ===================================
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+// ===================================
+// RESPONSIVE DESIGN
+// ===================================
+@media (max-width: 768px) {
+  .history-page {
+    padding: $spacing-md;
+
+    .search-container {
+      .char-counter {
+        text-align: left;
+        font-size: 11px;
+      }
+    }
+
+    .loading-state {
+      padding: $spacing-lg;
+
+      .spinner {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    .results-container {
+      h3 {
+        font-size: 16px;
+        padding: $spacing-sm $spacing-md;
+      }
+
+      app-play-list-body {
+        padding: $spacing-sm;
+      }
+    }
+
+    .placeholder-state {
+      padding: $spacing-lg;
+
+      h3 {
+        font-size: 20px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+
+      &::before {
+        font-size: 36px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .history-page {
+    padding: $spacing-sm;
+
+    .search-container {
+      gap: $spacing-xs;
+    }
+
+    .validation-message {
+      padding: $spacing-xs $spacing-sm;
+      font-size: 12px;
+    }
+
+    .loading-state {
+      padding: $spacing-md;
+    }
+
+    .placeholder-state {
+      padding: $spacing-md;
+
+      h3 {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+// ===================================
+// MODO OSCURO (OPCIONAL)
+// ===================================
+@media (prefers-color-scheme: dark) {
+  .history-page {
+    .results-container {
+      background: #2d3748;
+      color: white;
+
+      h3 {
+        background: #4a5568;
+        color: #f7fafc;
+        border-bottom-color: #718096;
+      }
+    }
+
+    .placeholder-state {
+      color: #a0aec0;
+
+      h3 {
+        color: #f7fafc;
+      }
+    }
+
+    .empty-state {
+      background: #2d3748;
+      border-color: #4a5568;
+
+      p {
+        color: #a0aec0;
+      }
+    }
+
+    .validation-message {
+      background: rgba(255, 193, 7, 0.1);
+      border-color: rgba(255, 193, 7, 0.3);
+      color: #fbb300;
+    }
+  }
+}
+
+// ===================================
+// UTILIDADES
+// ===================================
+.fade-enter {
+  animation: fadeIn $transition-medium ease;
+}
+
+.slide-enter {
+  animation: slideIn $transition-medium ease;
+}
+
+// Focus states para accesibilidad
+*:focus-visible {
+  outline: 2px solid $primary-color;
+  outline-offset: 2px;
+}
