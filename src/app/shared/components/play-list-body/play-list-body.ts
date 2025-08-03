@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ImgBrokenDirective } from '../../directives/img-broken-directive';
 import { OrderListPipe } from '@shared/pipes/order-list-pipe';
 import * as dataRaw from './../../../data/tracks.json';
@@ -14,7 +14,7 @@ import { TrackModel } from '@core/models/tracks.model';
 })
 export class PlayListBody implements OnInit {
   optionSort: { property: string | null, order: string } = { property: null, order: 'asc' }
-  tracks: Array<TrackModel> = [];
+  @Input() tracks: Array<TrackModel> = [];
 
   ngOnInit(): void {
     const { data } = (dataRaw as any).default;

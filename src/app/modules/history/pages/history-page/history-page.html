@@ -1,1 +1,47 @@
-<p>history-page works!</p>
+<div class="history-page">
+  <div class="search-container">
+    <app-search (onSearch)="receiveData($event)"></app-search>
+
+    <!-- ✅ Mostrar mensaje de validación -->
+    @if (searchTerm() && !isValidTerm()) {
+      <div class="validation-message">
+        <p>Por favor, introduzca al menos 3 caracteres para buscar</p>
+      </div>
+    }
+
+    <!-- ✅ Mostrar contador de caracteres -->
+    @if (searchTerm()) {
+      <div class="char-counter" [class.invalid]="!isValidTerm()">
+        {{ searchTerm().length }}/3 caracteres
+      </div>
+    }
+  </div>
+
+  <!-- ✅ Mostrar spinner solo si es válido y está buscando -->
+  @if (isValidTerm() && isSearching()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Buscando "{{ searchTerm() }}"...</p>
+    </div>
+  }
+
+  <!-- ✅ Mostrar resultados solo si el término es válido -->
+  @if (isValidTerm()) {
+    @if (listResults().length > 0) {
+      <div class="results-container">
+        <h3>Resultados de búsqueda ({{ listResults().length }})</h3>
+        <app-play-list-body [tracks]="listResults()"></app-play-list-body>
+      </div>
+    } @else if (!isSearching()) {
+      <div class="empty-state">
+        <p>No se encontraron resultados para "{{ searchTerm() }}"</p>
+      </div>
+    }
+  } @else {
+    <!-- ✅ Estado placeholder cuando no hay término válido -->
+    <div class="placeholder-state">
+      <h3>Buscar pistas</h3>
+      <p>Introduzca al menos 3 caracteres para comenzar a buscar</p>
+    </div>
+  }
+</div>
