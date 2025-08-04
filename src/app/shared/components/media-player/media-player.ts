@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 export class MediaPlayer implements OnDestroy    {
   @ViewChild('progressBar') progressBar: ElementRef = new ElementRef('')
 
-  private readonly multimediaService: MultimediaService = inject(MultimediaService);
+  public readonly multimediaService: MultimediaService = inject(MultimediaService);
 
   mockCover = signal<TrackModel>({
     _id: 0,
@@ -40,8 +40,9 @@ export class MediaPlayer implements OnDestroy    {
     const clickX = clientX - x //TODO: 1050 - x
     const percentageFromX = (clickX * 100) / width
     console.log(`Click(x): ${percentageFromX}`);
-    // this.multimediaService.seekAudio(percentageFromX)
+    this.multimediaService.seekAudio(percentageFromX)
   }
 
 
 }
+ 
