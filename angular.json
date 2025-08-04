@@ -6,8 +6,15 @@
     "app-play-music": {
       "projectType": "application",
       "schematics": {
+        "@schematics/angular:application": {
+          "style": "scss",
+          "routing": true,
+          "standalone": true,
+          "strict": true
+        },
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "scss",
+          "standalone": true
         }
       },
       "root": "",
@@ -89,6 +96,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
+            "codeCoverage": true,
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
