@@ -7,6 +7,11 @@ export const HOME_ROUTES: Routes = [
     loadChildren: () =>
       import('@modules/tracks/track.routes').then(m => m.TRACK_ROUTES)
   },
+   {
+    path: 'tracks/:trackId',
+    loadChildren: () =>
+      import('@modules/tracks/track.routes').then(m => m.TRACK_ROUTES)
+  },
   {
     path: 'favorites',
     loadChildren: () =>

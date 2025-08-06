@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TrackModel } from '@core/models/tracks.model';
 import { TrackService } from '@modules/tracks/services/track.service';
@@ -13,6 +13,7 @@ import { catchError, of } from 'rxjs';
   styleUrl: './track-page.scss'
 })
 export class TrackPage {
+  @Input() trackId: number = 0;
   private trackService = inject(TrackService);
 
   tracksTrending = toSignal(this.trackService.getAllTracks$().pipe(

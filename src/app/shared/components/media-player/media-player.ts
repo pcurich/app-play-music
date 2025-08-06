@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, OnDestroy, signal, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, OnDestroy, signal, ViewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TrackModel } from '@core/models/tracks.model';
 import { MultimediaService } from '@shared/index';
@@ -17,16 +17,13 @@ export class MediaPlayer implements OnDestroy    {
 
   public readonly multimediaService: MultimediaService = inject(MultimediaService);
 
-  mockCover = signal<TrackModel>({
-    _id: 0,
-    name: 'Track Name',
-    album: 'Album Name',
-    cover: 'https://via.placeholder.com/150',
-    url: 'https://example.com/track.mp3'
-  });
-
-  listObservers$: Array<Subscription> = []
   state = toSignal(this.multimediaService.callback, { initialValue: 'paused' });
+
+  constructor() {
+    effect(() => {
+      this.state  = this.multimediaService.playerStatusSignal;
+    });
+  }
 
   ngOnDestroy(): void {
     console.log('🔴🔴🔴🔴🔴🔴🔴 BOOM!');
@@ -45,4 +42,3 @@ export class MediaPlayer implements OnDestroy    {
 
 
 }
- 
