@@ -1,9 +1,9 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { TRACK_PROVIDERS } from '@modules/tracks';
 import { SHARED_PROVIDERS } from './shared';
 import { CookieService } from 'ngx-cookie-service';
@@ -18,6 +18,7 @@ import { HISTORY_PROVIDERS } from '@modules/history';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(
+      withFetch(),
       withInterceptors([
         authTokenInterceptor,
         loadingInterceptor,
@@ -26,7 +27,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideClientHydration(withEventReplay()),
     CookieService,
     ...TRACK_PROVIDERS,
